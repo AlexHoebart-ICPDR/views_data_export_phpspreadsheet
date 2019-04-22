@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * @file
+ * Main module functions and hooks.
+ */
+
+/**
+ * Implements hook_libraries_info().
+ */
+function views_data_export_phpspreadsheet_libraries_info() {
+  return array(
+    'PhpSpreadsheet' => array(
+      'name' => 'PhpSpreadsheet',
+      'vendor url' => 'https://phpspreadsheet.readthedocs.io/',
+      'download url' => 'https://github.com/PHPOffice/PhpSpreadsheet',
+      'version callback' => 'phpspreadsheet_get_library_version',
+      'path' => 'vendor',
+      'files' => array(
+        'php' => array(
+          'autoload.php',
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Libraries API version callback.
+ */
+function phpspreadsheet_get_library_version($library) {
+  $changelog_file = $library['library path'] . DIRECTORY_SEPARATOR . 'CHANGELOG.md';
+  if (file_exists($changelog_file)) {
+    $changelog = file_get_contents($changelog_file);
+    if (preg_match('/^\#\#\s+\[([^\]]+)\]/m', $changelog, $match)) {
+      return $match[1];
+    }
+  }
+  return 'n/a';
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function views_data_export_phpspreadsheet_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function views_data_export_phpspreadsheet_theme() {
+  //PhpSpreadsheet XLSX theme.
+  $hooks['views_data_export_xlsx_body'] = array(
+    'variables' => array(
+      'view' => NULL,
+      'options' => NULL,
+      'rows' => NULL,
+      'title' => NULL,
+    ),
+    'file' => 'views_data_export_phpspreadsheet.theme.inc',
+  );
+
+  return $hooks;
+}
+
+/**
+ * Implements hook_views_plugins().
+ */
+function views_data_export_phpspreadsheet_views_plugins() {
+  $path = drupal_get_path('module', 'views_data_export_phpspreadsheet');
+
+  return array(
+    'style' => array(
+      'views_data_export_xlsx' => array(
+        'title' => t('XLSX file'),
+        'help' => t('Display the view as an xlsx file.'),
+        'handler' => 'views_data_export_phpSpreadsheet_plugin_style_export',
+        'export headers' => array('Content-Type' => 'application/vnd.ms-excel'),
+        'export feed type' => 'xlsx',
+        'export feed text' => 'XLSX',
+        'export feed file' => '%view.xlsx',
+        'export feed icon' => $path . '/images/xlsx.png',
+        'additional themes' => array(
+          'views_data_export_xlsx_body' => 'style',
+        ),
+        'additional themes base' => 'views_data_export_xlsx',
+        'path' => $path . '/plugins',
+        'parent' => 'views_data_export_xls',
+        'theme' => 'views_data_export_xlsx',
+        'theme file' => 'views_data_export_phpspreadsheet.theme.inc',
+        'uses row plugin' => FALSE,
+        'uses fields' => TRUE,
+        'uses options' => TRUE,
+        'type' => 'data_export',
+      ),
+    ),
+  );
+}

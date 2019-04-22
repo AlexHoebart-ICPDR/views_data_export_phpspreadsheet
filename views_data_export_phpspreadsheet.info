@@ -1,0 +1,11 @@
+name = Views Data Export PhpSpreadsheet
+description = "Extension to VDE, which allows XLSX files export utilizing PhpSpreadsheet library"
+
+package = Views
+core = 7.x
+
+dependencies[] = views_data_export
+dependencies[] = libraries
+
+; Plugins
+files[] = plugins/views_data_export_phpspreadsheet_plugin_style_export.inc
