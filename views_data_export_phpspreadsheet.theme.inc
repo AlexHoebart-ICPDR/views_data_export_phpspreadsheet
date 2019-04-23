@@ -31,9 +31,11 @@ function theme_views_data_export_xlsx_body(&$vars) {
   foreach (array_keys($vars["header"]) as $index=>$field_name){
     $col_name = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($index+1);
     $col_coordinate = $col_name.'1:'.$col_name.count($complete_array);
-    $color_set= ltrim($vars["options"]["color"][$field_name],'#');
-    if(!empty($color_set) && !in_array($color_set,['000','000000'])){
-      $xlsx->getActiveSheet()->getStyle($col_coordinate)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($color_set);
+    if(!empty($vars["options"]["color"][$field_name])){
+      $color_set= ltrim($vars["options"]["color"][$field_name],'#');
+      if(!empty($color_set) && !in_array($color_set,['000','000000'])){
+        $xlsx->getActiveSheet()->getStyle($col_coordinate)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($color_set);
+      }
     }
   }
 
