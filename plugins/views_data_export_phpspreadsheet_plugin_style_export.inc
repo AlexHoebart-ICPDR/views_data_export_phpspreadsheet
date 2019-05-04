@@ -49,19 +49,22 @@ class views_data_export_phpspreadsheet_plugin_style_export extends views_data_ex
       '#type' => 'fieldset',
       '#tree' => TRUE,
     );
-
-    $columns = $this->sanitize_columns($this->options['columns']);
+    if(!empty($this->options['columns'])) {
+      $columns = $this->sanitize_columns($this->options['columns']);
+    }
 
     // Create an array of allowed columns from the data we know.
     $field_names = $this->display->handler->get_field_labels();
-    foreach ($columns as $field => $column) {
-      $option_default = (!empty($this->options['color'][$field])) ? $this->options['color'][$field] : '';
-      $form['color'][$field] = array(
-        '#title' => $field_names[$field],
-        '#type' => 'textfield',
-        '#default_value' => $option_default,
-        '#attributes' => ['class'=> ['color'],]
-      );
+    if(!empty($columns)) {
+      foreach ($columns as $field => $column) {
+        $option_default = (!empty($this->options['color'][$field])) ? $this->options['color'][$field] : '';
+        $form['color'][$field] = [
+          '#title' => $field_names[$field],
+          '#type' => 'textfield',
+          '#default_value' => $option_default,
+          '#attributes' => ['class' => ['color'],]
+        ];
+      }
     }
     drupal_add_js(drupal_get_path('module', 'views_data_export_phpspreadsheet') . "/js/color.js");
   }
