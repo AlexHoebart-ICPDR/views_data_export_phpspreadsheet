@@ -25,8 +25,6 @@ function theme_views_data_export_xlsx_body(&$vars) {
   // Create PhpSpreadsheet spreadsheet and add rows to it.
   $xlsx = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
   $xlsx->setActiveSheetIndex(0);
-  $vars["options"]["color"];
-
   $xlsx->getActiveSheet()->fromArray($complete_array);
   foreach (array_keys($vars["header"]) as $index=>$field_name){
     $col_name = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($index+1);
