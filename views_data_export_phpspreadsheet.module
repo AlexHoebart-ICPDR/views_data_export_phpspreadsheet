@@ -9,20 +9,20 @@
  * Implements hook_libraries_info().
  */
 function views_data_export_phpspreadsheet_libraries_info() {
-  return array(
-    'PhpSpreadsheet' => array(
+  return [
+    'PhpSpreadsheet' => [
       'name' => 'PhpSpreadsheet',
       'vendor url' => 'https://phpspreadsheet.readthedocs.io/',
       'download url' => 'https://github.com/PHPOffice/PhpSpreadsheet',
       'version callback' => 'phpspreadsheet_get_library_version',
       'path' => 'vendor',
-      'files' => array(
-        'php' => array(
+      'files' => [
+        'php' => [
           'autoload.php',
-        ),
-      ),
-    ),
-  );
+        ],
+      ],
+    ],
+  ];
 }
 
 /**
@@ -43,25 +43,26 @@ function phpspreadsheet_get_library_version($library) {
  * Implements hook_views_api().
  */
 function views_data_export_phpspreadsheet_views_api() {
-  return array(
-    'api' => 3,
-  );
+  // Using version 2 because Views Data Export still uses it too.
+  return [
+    'api' => 2,
+  ];
 }
 
 /**
  * Implements hook_theme().
  */
 function views_data_export_phpspreadsheet_theme() {
-  //PhpSpreadsheet XLSX theme.
-  $hooks['views_data_export_xlsx_body'] = array(
-    'variables' => array(
+  // PhpSpreadsheet XLSX theme.
+  $hooks['views_data_export_xlsx_body'] = [
+    'variables' => [
       'view' => NULL,
       'options' => NULL,
       'rows' => NULL,
       'title' => NULL,
-    ),
+    ],
     'file' => 'views_data_export_phpspreadsheet.theme.inc',
-  );
+  ];
 
   return $hooks;
 }
@@ -72,20 +73,21 @@ function views_data_export_phpspreadsheet_theme() {
 function views_data_export_phpspreadsheet_views_plugins() {
   $path = drupal_get_path('module', 'views_data_export_phpspreadsheet');
 
-  return array(
-    'style' => array(
-      'views_data_export_xlsx' => array(
+  return [
+    'style' => [
+      'views_data_export_xlsx' => [
         'title' => t('XLSX file'),
         'help' => t('Display the view as an xlsx file.'),
-        'handler' => 'views_data_export_phpSpreadsheet_plugin_style_export',
-        'export headers' => array('Content-Type' => 'application/vnd.ms-excel'),
+        'handler' => 'views_data_export_phpspreadsheet_plugin_style_export',
+        'export headers' => ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
         'export feed type' => 'xlsx',
         'export feed text' => 'XLSX',
         'export feed file' => '%view.xlsx',
         'export feed icon' => $path . '/images/xlsx.png',
-        'additional themes' => array(
+        'additional themes' => [
+          'views_data_export_xlsx_header' => 'style',
           'views_data_export_xlsx_body' => 'style',
-        ),
+        ],
         'additional themes base' => 'views_data_export_xlsx',
         'path' => $path . '/plugins',
         'parent' => 'views_data_export_xls',
@@ -95,7 +97,7 @@ function views_data_export_phpspreadsheet_views_plugins() {
         'uses fields' => TRUE,
         'uses options' => TRUE,
         'type' => 'data_export',
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 }

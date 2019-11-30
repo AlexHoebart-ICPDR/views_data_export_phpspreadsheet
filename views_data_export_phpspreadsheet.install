@@ -9,35 +9,42 @@
  * Implements hook_requirements().
  */
 function views_data_export_phpspreadsheet_requirements($phase) {
-  $requirements = array();
+  $requirements = [];
   // Ensure translations don't break during installation.
   $t = get_t();
+  // Check to see if the PhpSpreadsheet library is available.
   if ($phase == 'runtime') {
-    // Try to detect PhpSpreadsheet library.
-    $library = libraries_detect('PhpSpreadsheet');
-    if (($library = libraries_detect('PhpSpreadsheet')) && !empty($library['installed'])) {
+    $class_loaded = class_exists('\PhpOffice\PhpSpreadsheet\Spreadsheet');
+    $library = NULL;
+    if ($class_loaded) {
+      $library = ['version' => '1'];
+    }
+    elseif (module_enabled('libraries')) {
+      $library = libraries_detect('PhpSpreadsheet');
+    }
+    if ($class_loaded || ($library && !empty($library['installed']))) {
       // The library is installed. Awesome!
-      $requirements['views_data_export_phpspreadsheet'] = array(
+      $requirements['views_data_export_phpspreadsheet'] = [
         'title' => $t('PhpSpreadsheet library'),
         'value' => $library['version'],
         'severity' => REQUIREMENT_OK,
-      );
+      ];
     }
     else {
       $error = $t('Not found');
-      $error_message = '';
+      $error_message = $t('PhpSpreadsheet library not installed.');
       if ($library) {
         // Retrieve status code.
         $error = $library['error'];
         // Retrieve error message.
         $error_message = $library['error message'];
       }
-      $requirements['views_data_export_phpspreadsheet'] = array(
+      $requirements['views_data_export_phpspreadsheet'] = [
         'title' => $t('PhpSpreadsheet library'),
         'value' => $error,
         'description' => $error_message,
         'severity' => REQUIREMENT_ERROR,
-      );
+      ];
     }
   }
 
