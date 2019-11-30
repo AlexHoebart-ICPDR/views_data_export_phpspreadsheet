@@ -1,0 +1,10 @@
+{
+  "name": "drupal/views_data_export_phpspreadsheet",
+  "description": "View data export with Use PhpSpreadsheet.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": {
+    "phpoffice/phpspreadsheet": "~1.0"
+  }
+}
