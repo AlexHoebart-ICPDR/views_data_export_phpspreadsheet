@@ -19,7 +19,7 @@ function views_data_export_phpspreadsheet_requirements($phase) {
     if ($class_loaded) {
       $library = ['version' => '1'];
     }
-    elseif (module_enabled('libraries')) {
+    elseif (module_exists('libraries')) {
       $library = libraries_detect('PhpSpreadsheet');
     }
     if ($class_loaded || ($library && !empty($library['installed']))) {
