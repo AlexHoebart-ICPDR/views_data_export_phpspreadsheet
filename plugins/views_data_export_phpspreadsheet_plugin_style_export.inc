@@ -40,13 +40,14 @@ class views_data_export_phpspreadsheet_plugin_style_export extends views_data_ex
     // Load PhpSpreadsheet library if primary class is not already present.
     if (!class_exists('\PhpOffice\PhpSpreadsheet\Spreadsheet')) {
       $library = libraries_load('PhpSpreadsheet');
-    }else{
+    }
+    else {
       $library = ['loaded' => TRUE];
     }
     if (empty($library['loaded'])) {
       $message = t('The PhpSpreadsheet library could not be found! Please following the instructions from the README.txt to get the library.');
       watchdog('views_data_export_phpspreadsheet', $message, [], WATCHDOG_ERROR);
-      drupal_set_message($message, $type = 'error');
+      backdrop_set_message($message, $type = 'error');
       return FALSE;
     }
 
@@ -75,13 +76,13 @@ class views_data_export_phpspreadsheet_plugin_style_export extends views_data_ex
    * Set the PhpSpreadsheet document to the output file path.
    */
   protected function saveSpreadsheetFile() {
-    $file_path = drupal_realpath($this->view->display_handler->outputfile_path());
+    $file_path = backdrop_realpath($this->view->display_handler->outputfile_path());
 
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->getSpreadsheet(), "Xlsx");
     $writer->save($file_path);
 
     // Writer has deleted and re-created the file, so fix permissions now.
-    drupal_chmod($file_path);
+    backdrop_chmod($file_path);
   }
 
   /**
@@ -100,7 +101,7 @@ class views_data_export_phpspreadsheet_plugin_style_export extends views_data_ex
       }
       else {
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
-        $file_path = drupal_realpath($this->view->display_handler->outputfile_path());
+        $file_path = backdrop_realpath($this->view->display_handler->outputfile_path());
         if (file_exists($file_path)) {
           $this->spreadsheet = $reader->load($file_path);
           $this->spreadsheet->setActiveSheetIndex(0);
@@ -195,11 +196,11 @@ class views_data_export_phpspreadsheet_plugin_style_export extends views_data_ex
           '#title' => $field_names[$field],
           '#type' => 'textfield',
           '#default_value' => $option_default,
-          '#attributes' => ['class' => ['color'],],
+          '#attributes' => ['class' => ['color']],
         ];
       }
     }
-    drupal_add_js(drupal_get_path('module', 'views_data_export_phpspreadsheet') . "/js/color.js");
+    backdrop_add_js(backdrop_get_path('module', 'views_data_export_phpspreadsheet') . "/js/color.js");
   }
 
   /**

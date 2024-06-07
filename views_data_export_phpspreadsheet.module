@@ -71,7 +71,7 @@ function views_data_export_phpspreadsheet_theme() {
  * Implements hook_views_plugins().
  */
 function views_data_export_phpspreadsheet_views_plugins() {
-  $path = drupal_get_path('module', 'views_data_export_phpspreadsheet');
+  $path = backdrop_get_path('module', 'views_data_export_phpspreadsheet');
 
   return [
     'style' => [
@@ -100,4 +100,13 @@ function views_data_export_phpspreadsheet_views_plugins() {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_autoload_info().
+ */
+function views_data_export_phpspreadsheet_autoload_info() {
+  return array(
+    'views_data_export_phpspreadsheet_plugin_style_export' => 'plugins/views_data_export_phpspreadsheet_plugin_style_export.inc',
+  );
 }
