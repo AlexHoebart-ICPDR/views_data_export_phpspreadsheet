@@ -306,6 +306,10 @@ class views_data_export_phpspreadsheet_plugin_style_export extends views_data_ex
       $this->saveSpreadsheetFile();
     }
     else {
+      // Avoid corrupted file on some servers
+      // see https://stackoverflow.com/questions/57730290/phpspreadsheet-corrupted-xlsx-file
+      ob_end_clean();
+
       // Catch the output of the spreadsheet.
       ob_start();
 
